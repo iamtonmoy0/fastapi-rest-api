@@ -39,7 +39,14 @@ async def get_product(skip: int = 0, limit: int = 0):
 
 
 @app.get("/product/{id}")
-async def get_product_by_filter(id: str, query: str = None):
+async def get_product_by_filter(id: str, query: str = None, short: bool = False):
+    product = {"product": "hello world"}
     if query:
-        return {"product_id": id, "query": query}
-    return {"product_id": id}
+        product.update({"query": query})
+    if not short:
+        product.update(
+            {
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+            }
+        )
+    return product
