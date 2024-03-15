@@ -13,7 +13,33 @@ async def root():
 async def get_items():
     return {"item": "this is items"}
 
+
 # get item by id
 @app.get("/items/{id}")
 async def get_item(id):
     return {"item": id}
+
+
+fake_db = [
+    {"item": "apple"},
+    {"item": "banana"},
+    {"item": "cherry"},
+    {"item": "date"},
+    {"item": "elderberry"},
+]
+
+
+# pagination and filtering
+@app.get("/products")
+async def get_product(skip: int = 0, limit: int = 0):
+    return fake_db[skip : skip + limit]
+
+
+# filtering with query added
+
+
+@app.get("/product/{id}")
+async def get_product_by_filter(id: str, query: str = None):
+    if query:
+        return {"product_id": id, "query": query}
+    return {"product_id": id}
