@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from pydantic import BaseModel
 
 app = FastAPI()
 
@@ -50,3 +51,25 @@ async def get_product_by_filter(id: str, query: str = None, short: bool = False)
             }
         )
     return product
+
+
+# create product with type  validation
+
+
+class Product(BaseModel):
+    name: str
+    description: str
+    price: float
+    tax: float
+
+
+@app.post("/product")
+async def create_product(product: Product):
+    product_dict = product.dict()
+    if product.tax:
+        price_with_tax = product.price + product.tax
+        product_dict.update({"price with tax": price_with_tax})
+    return product_dict
+
+
+# query parameter with string validation
