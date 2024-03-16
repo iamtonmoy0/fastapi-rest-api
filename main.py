@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Query
 from pydantic import BaseModel
 
 app = FastAPI()
@@ -73,3 +73,11 @@ async def create_product(product: Product):
 
 
 # query parameter with string validation
+@app.get("/read-product")
+async def read_product(
+    q: list[str] | None = Query(None, min_length=3, max_length=10, regex="^okayok$"),
+):
+    results = {"product": [{"hello": "world"}]}
+    if q:
+        results.update({"q": q})
+    return results
