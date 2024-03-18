@@ -1,5 +1,5 @@
-from fastapi import FastAPI, Query
-from pydantic import BaseModel
+from fastapi import Body, FastAPI, Query, Path
+from pydantic import BaseModel, Field
 
 app = FastAPI()
 
@@ -82,3 +82,51 @@ async def read_product(
     if q:
         results.update({"q": q})
     return results
+
+
+@app.get("/item-hidden")
+async def item_hidden_func(
+    hidden_query: str | None = Query(None, include_in_schema=False),
+):
+    if hidden_query:
+        return {"hidden query": hidden_query}
+    return {"not found": "not found"}
+
+
+# request body
+"""
+Request body param
+"""
+
+
+class Item(BaseModel):
+    name: str
+    description: str | None = None
+    price: float
+
+
+@app.put("/item/{item_id}")
+async def update_item(
+    *,
+    item_id: int = Path(..., title="item id of the item", ge=0, le=150),
+    q: str | None = None,
+    item: Item | None = None,
+):
+    results = {"item_id": item_id}
+    if q:
+        results.update({"q": q})
+    if item:
+        results.update({"item": item})
+    return results
+
+
+class User(BaseModel):
+    name: str
+    description: str | None = Field(
+        None, title="the discription of the item", max_length=300
+    )
+
+
+@app.post("/user")
+async def create_user(user: User = Body(..., embed=True)):
+    return user
