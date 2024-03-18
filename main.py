@@ -73,6 +73,7 @@ async def create_product(product: Product):
 
 
 # query parameter with string validation
+# regex validation
 @app.get("/read-product")
 async def read_product(
     q: list[str] | None = Query(None, min_length=3, max_length=10, regex="^okayok$"),
