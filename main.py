@@ -1,5 +1,6 @@
 from fastapi import Body, FastAPI, Query, Path
 from pydantic import BaseModel, Field
+from typing import List
 
 app = FastAPI()
 
@@ -130,3 +131,22 @@ class User(BaseModel):
 @app.post("/user")
 async def create_user(user: User = Body(..., embed=True)):
     return user
+
+
+# body
+
+
+class Image(BaseModel):
+    url: str
+
+
+class Items(BaseModel):
+    name: str
+    description: str
+    tags: list[str] = []
+    image: Image | None = None
+
+
+@app.post("/item-create")
+def create_items(items: Items):
+    return items
