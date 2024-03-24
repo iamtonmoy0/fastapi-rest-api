@@ -147,6 +147,12 @@ class Items(BaseModel):
     image: Image | None = None
 
 
+class Offer(BaseModel):
+    title: str
+    item: list[Items]
+
+
 @app.post("/item-create")
 def create_items(items: Items):
     return items
+# cookie and header params
