@@ -1,6 +1,5 @@
 from fastapi import Body, FastAPI, Query, Path
 from pydantic import BaseModel, Field
-from typing import List
 
 app = FastAPI()
 
@@ -155,4 +154,20 @@ class Offer(BaseModel):
 @app.post("/item-create")
 def create_items(items: Items):
     return items
+
+
 # cookie and header params
+
+
+class LoginUser(BaseModel):
+    username: str
+    password: str
+
+
+# form fields
+@app.post("/login/")
+async def login(user: LoginUser):
+    return user
+
+
+# request files
